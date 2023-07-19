@@ -1,18 +1,18 @@
-//jshint esversion:6
 
+const dotenv = require("dotenv");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const _ = require("lodash");
 
 const app = express();
-
+dotenv.config();
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://yuvrajvarshney2021:yuvraj@ac-zrrxexi-shard-00-00.xgxjkbx.mongodb.net:27017,ac-zrrxexi-shard-00-01.xgxjkbx.mongodb.net:27017,ac-zrrxexi-shard-00-02.xgxjkbx.mongodb.net:27017/todoList?ssl=true&replicaSet=atlas-87wegp-shard-0&authSource=admin&retryWrites=true&w=majority", {useNewUrlParser: true});
+mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true});
 
 const itemsSchema = {
   name: String
@@ -57,7 +57,7 @@ app.get("/", function(req, res) {
       });
       res.redirect("/");
     } else {
-      res.render("list", {listTitle: "Planned", newListItems: foundItems});
+      res.render("list", {listTitle: "Planned Today", newListItems: foundItems});
     }
   });
 
@@ -97,7 +97,7 @@ app.post("/", function(req, res){
     name: itemName
   });
 
-  if (listName === "Planned"){
+  if (listName === "Planned Today"){
     item.save();
     res.redirect("/");
   } else {
@@ -113,7 +113,7 @@ app.post("/delete", function(req, res){
   const checkedItemId = req.body.checkbox;
   const listName = req.body.listName;
 
-  if (listName === "Planned") {
+  if (listName === "Planned Today") {
     Item.findByIdAndRemove(checkedItemId, function(err){
       if (!err) {
         console.log("Successfully deleted checked item.");
