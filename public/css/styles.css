@@ -1,6 +1,4 @@
 
-
-
 html {
   background-color: #E4E9FD;
   background-image:-webkit-linear-gradient(top right, white, black);
@@ -102,3 +100,35 @@ footer {
   
 }
 
+
+
+h6{
+  font-size: larger;
+  margin-left: 20px;
+  
+}
+h2{
+margin-left: 80px;
+
+}
+
+
+
+
+.rules{
+  height: 100%;
+  /* margin-top: 70px; */
+  position: fixed;
+  background-color: gray;
+  color: white;
+}
+
+.bucket{
+  margin-left: 600px;
+}
+
+.cont{
+  display: flex;
+  
+  
+}

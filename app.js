@@ -21,19 +21,6 @@ const itemsSchema = {
 const Item = mongoose.model("Item", itemsSchema);
 
 
-const item1 = new Item({
-  name: "Welcome to your todolist!"
-});
-
-const item2 = new Item({
-  name: "Hit the + button to add a new item."
-});
-
-const item3 = new Item({
-  name: "<-- Hit this to delete an item."
-});
-
-const defaultItems = [item1, item2, item3];
 
 const listSchema = {
   name: String,
@@ -47,18 +34,8 @@ app.get("/", function(req, res) {
 
   Item.find({}, function(err, foundItems){
 
-    if (foundItems.length === 0) {
-      Item.insertMany(defaultItems, function(err){
-        if (err) {
-          console.log(err);
-        } else {
-          console.log("Successfully savevd default items to DB.");
-        }
-      });
-      res.redirect("/");
-    } else {
       res.render("list", {listTitle: "Planned Today", newListItems: foundItems});
-    }
+   
   });
 
 });
@@ -72,7 +49,7 @@ app.get("/:customListName", function(req, res){
         //Create a new list
         const list = new List({
           name: customListName,
-          items: defaultItems
+          items: []
         });
         list.save();
         res.redirect("/" + customListName);
@@ -109,6 +86,8 @@ app.post("/", function(req, res){
   }
 });
 
+
+
 app.post("/delete", function(req, res){
   const checkedItemId = req.body.checkbox;
   const listName = req.body.listName;
@@ -131,9 +110,7 @@ app.post("/delete", function(req, res){
 
 });
 
-app.get("/about", function(req, res){
-  res.render("about");
-});
+
 
 app.listen(3000, function() {
   console.log("Server started on port 3000");
